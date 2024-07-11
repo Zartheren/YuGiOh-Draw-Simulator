@@ -1,6 +1,6 @@
 This program is made for YuGiOh but plans for adapting it for multiple trading card games may in the future.
 
-This programs purpose is to simulate first hand draws of a deck to gauge the decks consistancy.
+This programs purpose is to simulate first hand draws of a deck to gauge the decks consistency.
 The following are the notes I have taken down while thinking of the functions of what the program will do going forward:
 
 take a standardized list of cards and turn it into a list of integers ranging from 1 to 40-60
