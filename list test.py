@@ -25,3 +25,20 @@ print(deckList)
 print('Number of card names:')
 print(len(deckList))
 
+# Making list of only card names
+cardNames = [x[0] for x in deckList]
+numList = 0
+
+while True:
+    if len(cardNames) <= numList:
+        print(f"{numList}. {list.index(cardNames[numList])}")
+
+        numList = numList + 1
+
+    else:
+        break
+
+print("Done")
+
+random.shuffle(deckList)
+
