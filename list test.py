@@ -1,6 +1,9 @@
+# This programs purpose is to simulate first-hand draws of a deck to gauge the decks consistency
+
 import collections
 import numpy as np
 import re
+import random
 
 deckList = collections.deque([])
 
@@ -15,6 +18,10 @@ while True:
         regexResults = re.search(r'(.*) x([0-9]*)', addCard)
         deckList.append(regexResults.groups())
 
+# Output what you entered, in the stored format
 print("Your deck list is:")
-
 print(deckList)
+
+print('Number of card names:')
+print(len(deckList))
+
