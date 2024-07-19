@@ -66,6 +66,18 @@ while True:
     else:
         print("Please enter a number corresponding to one of the card numbers above")
 
-random.shuffle(deck)
+print("Please input how many times you would like the program to run")
+runTime = input()
 
-print(deck)
+draws = 0
+hand = []
+results = []
+
+for runs in deck:
+    while draws < int(runTime):
+        random.shuffle(deck)
+        hand = deck[:5]
+        results.append(len(list(set(hand) & set(neededCards))))
+        draws += 1
+
+print(results)
