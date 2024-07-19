@@ -68,18 +68,24 @@ while desiredCard != "":
     else:
         print("Please input how many times you would like the program to run")
 
+# Getting number of times to run test
 requestedDraws = input()
 
 draws = 0
 hand = []
 results = []
 
+# Simulate shuffling deck and drawing
 for runs in deck:
     while draws < int(requestedDraws):
+        # Shuffle deck
         random.shuffle(deck)
+        # Drawing the first 5 cards of the deck
         for index in range(0, 5):
             hand.append(deck[index])
+        # Storing resulting draws that match the needed cards
         results.append(len(np.intersect1d(neededCards, hand)))
+        # Reset and adding to draw counter
         hand = []
         draws += 1
 
