@@ -9,15 +9,17 @@ import random
 # Deck list that will hold the exported info from EDO Pro
 deckList = collections.deque([])
 
+print("Please paste the deck list copied from EDO Pro")
+
 # Goes through given deck list and separates the card name from the card count
 while True:
-    addCard = input()
+    desiredCard = input()
     # Looks for a return as the end of the deck list
-    if addCard == '':
+    if desiredCard == '':
         break
     # Looks at given card name and removes the " x" in each line and separates the name and count by regular expression
     else:
-        regexResults = re.search(r'(.*) x([0-9]*)', addCard)
+        regexResults = re.search(r'(.*) x([0-9]*)', desiredCard)
         deckList.append(regexResults.groups())
 
 # Making list of only card names
@@ -55,29 +57,45 @@ while True:
 neededCards = collections.deque([])
 
 # collecting numbers from user of needed cards and referencing them back to corresponding number in list
-while True:
-    addCard = input()
-    if addCard == "":
-        break
+desiredCard = input()
 
-    elif addCard.isnumeric() and int(addCard) <= len(cardNames):
-        neededCards.append(cardNames[(int(addCard) - 1)])
+while desiredCard != "":
+    desiredCard = input()
+
+    if desiredCard.isnumeric() and int(desiredCard) <= len(cardNames):
+        neededCards.append(cardNames[(int(desiredCard) - 1)])
 
     else:
-        print("Please enter a number corresponding to one of the card numbers above")
+        print("Please input how many times you would like the program to run")
 
-print("Please input how many times you would like the program to run")
-runTime = input()
+requestedDraws = input()
 
 draws = 0
 hand = []
 results = []
 
 for runs in deck:
-    while draws < int(runTime):
+    while draws < int(requestedDraws):
         random.shuffle(deck)
-        hand = deck[:5]
-        results.append(len(list(set(hand) & set(neededCards))))
+        for index in range(0, 5):
+            hand.append(deck[index])
+        results.append(len(np.intersect1d(neededCards, hand)))
+        hand = []
         draws += 1
 
-print(results)
+zero = results.count(0)
+one = results.count(1)
+two = results.count(2)
+three = results.count(3)
+four = results.count(4)
+five = results.count(5)
+
+print(
+    f"""You had {zero} hands with none of the needed cards
+    {one} with 1 or {(100 * one/draws):.2f}%
+    {two} with 2 or {(100 * two/draws):.2f}%
+    {three} with 3 or {(100 * three/draws):.2f}%
+    {four} with 4 or {(100 * four/draws):.2f}%
+    {five} with 5 or {(100 * five/draws):.2f}%
+    """
+    )
