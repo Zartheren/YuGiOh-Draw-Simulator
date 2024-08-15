@@ -78,14 +78,16 @@ while desiredCard != "":
 # Getting number of times to run test
 requestedDraws = pyinputplus.inputNum(min=1)
 
-draws = 0
+firstDraws = 0
+secondDraws = 0
+totalDraws = 0
 hand = []
 firstTurnResults = []
 secondTurnResults = []
 
 # Simulate shuffling deck and drawing
 for runs in deck:
-    while draws < int(requestedDraws):
+    while totalDraws < int(requestedDraws):
         # Shuffle deck
         random.shuffle(deck)
         # Getting random boolean to see if first hand is on first turn or second
@@ -96,6 +98,8 @@ for runs in deck:
                 hand.append(deck[index])
             # Storing resulting draws that match the needed cards
             firstTurnResults.append(len(np.intersect1d(neededCards, hand)))
+            # Adding to first turn draw counter
+            firstDraws += 1
 
         else:
             # Drawing the first 6 cards of the deck for second turn move
@@ -103,10 +107,12 @@ for runs in deck:
                 hand.append(deck[index])
             # Storing resulting draws that match the needed cards
             secondTurnResults.append(len(np.intersect1d(neededCards, hand)))
+            # Adding to second turn draw counter
+            secondDraws += 1
 
-        # Reset and adding to draw counter
+        # Reset and adding to total draw counter
         hand = []
-        draws += 1
+        totalDraws += 1
 
 # Counting first turn results
 firstZero = firstTurnResults.count(0)
@@ -127,20 +133,31 @@ secondSix = secondTurnResults.count(6)
 
 print(
     f"""    The following is for first turn draws
-    You had {firstZero} hands with none of the needed cards or {(100 * firstZero / draws):.2f}%
-    {firstOne} with 1 or {(100 * firstOne / draws):.2f}%
-    {firstTwo} with 2 or {(100 * firstTwo / draws):.2f}%
-    {firstThree} with 3 or {(100 * firstThree / draws):.2f}%
-    {firstFour} with 4 or {(100 * firstFour / draws):.2f}%
-    {firstFive} with 5 or {(100 * firstFive / draws):.2f}%
+    You Drew first {firstDraws} times
+    You had {firstZero} hands with none of the needed cards or {(100 * firstZero / firstDraws):.2f}%
+    {firstOne} with 1 or {(100 * firstOne / firstDraws):.2f}%
+    {firstTwo} with 2 or {(100 * firstTwo / firstDraws):.2f}%
+    {firstThree} with 3 or {(100 * firstThree / firstDraws):.2f}%
+    {firstFour} with 4 or {(100 * firstFour / firstDraws):.2f}%
+    {firstFive} with 5 or {(100 * firstFive / firstDraws):.2f}%
     
     The following is for second turn draws
-    You had {secondZero} hands with none of the needed cards or {(100 * secondZero / draws):.2f}%
-    {secondOne} with 1 or {(100 * secondOne / draws):.2f}%
-    {secondTwo} with 2 or {(100 * secondTwo / draws):.2f}%
-    {secondThree} with 3 or {(100 * secondThree / draws):.2f}%
-    {secondFour} with 4 or {(100 * secondFour / draws):.2f}%
-    {secondFive} with 5 or {(100 * secondFive / draws):.2f}%
-    {secondSix} with 6 or {(100 * secondSix / draws):.2f}%
+    You Drew second {secondDraws} times
+    You had {secondZero} hands with none of the needed cards or {(100 * secondZero / secondDraws):.2f}%
+    {secondOne} with 1 or {(100 * secondOne / secondDraws):.2f}%
+    {secondTwo} with 2 or {(100 * secondTwo / secondDraws):.2f}%
+    {secondThree} with 3 or {(100 * secondThree / secondDraws):.2f}%
+    {secondFour} with 4 or {(100 * secondFour / secondDraws):.2f}%
+    {secondFive} with 5 or {(100 * secondFive / secondDraws):.2f}%
+    {secondSix} with 6 or {(100 * secondSix / secondDraws):.2f}%
+
+    In total out of {totalDraws}, these are the combined results:
+    {firstZero + secondZero} with 0 or {(100 * (firstZero + secondZero) / totalDraws):.2f}%
+    {firstOne + secondOne} with 1 or {(100 * (firstOne + secondOne) / totalDraws):.2f}%
+    {firstTwo + secondTwo} with 2 or {(100 * (firstTwo + secondTwo) / totalDraws):.2f}%
+    {firstThree + secondThree} with 3 or {(100 * (firstThree + secondThree) / totalDraws):.2f}%
+    {firstFour + secondFour} with 4 or {(100 * (firstFour + secondFour) / totalDraws):.2f}%
+    {firstFive + secondFive} with 5 or {(100 * (firstFive + secondFive) / totalDraws):.2f}%
+    {secondSix} with 6 or {(100 * secondSix / totalDraws):.2f}%
     """
 )
