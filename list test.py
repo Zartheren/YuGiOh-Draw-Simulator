@@ -5,6 +5,9 @@ import string
 import numpy as np
 import re
 import random
+import pyinputplus
+import os
+
 
 # Deck list that will hold the exported info from EDO Pro
 deckList = collections.deque([])
@@ -38,9 +41,8 @@ for card in deckList:
         filling += 1
     filling = 0
 
-print("Which of these single cards would you need one of in a opening hand to make a play")
-print("Type the number of the corresponding card and hit enter after each one")
-print("Enter an empty entry after you have finished")
+# Clearing terminal window before displaying list back to user
+os.system('cls')
 
 # Printing list of cards with number in front so that the user can return what cards are needed in first hand
 while True:
@@ -53,55 +55,92 @@ while True:
         print("________________________________________________________________________________")
         break
 
+
+print("\nWhich of these single cards would you need one of in a opening hand to make a play")
+print("Type the number of the corresponding card and hit enter after each one")
+print("Enter an empty entry after you have finished")
+
 # Making list for the needed cards in first hand
 neededCards = collections.deque([])
 
 # collecting numbers from user of needed cards and referencing them back to corresponding number in list
-desiredCard = input()
+desiredCard = pyinputplus.inputNum("Card number: ", blank=True, min=1, max=(len(cardNames)))
 
 while desiredCard != "":
-    desiredCard = input()
+    desiredCard = pyinputplus.inputNum("Card number: ", blank=True, min=1, max=(len(cardNames)))
 
-    if desiredCard.isnumeric() and int(desiredCard) <= len(cardNames):
+    if desiredCard != "":
         neededCards.append(cardNames[(int(desiredCard) - 1)])
 
     else:
         print("Please input how many times you would like the program to run")
 
 # Getting number of times to run test
-requestedDraws = input()
+requestedDraws = pyinputplus.inputNum(min=1)
 
 draws = 0
 hand = []
-results = []
+firstTurnResults = []
+secondTurnResults = []
 
 # Simulate shuffling deck and drawing
 for runs in deck:
     while draws < int(requestedDraws):
         # Shuffle deck
         random.shuffle(deck)
-        # Drawing the first 5 cards of the deck
-        for index in range(0, 5):
-            hand.append(deck[index])
-        # Storing resulting draws that match the needed cards
-        results.append(len(np.intersect1d(neededCards, hand)))
+        # Getting random boolean to see if first hand is on first turn or second
+        firstTurn = bool(random.getrandbits(1))
+        if firstTurn:
+            # Drawing the first 5 cards of the deck for first turn move
+            for index in range(0, 5):
+                hand.append(deck[index])
+            # Storing resulting draws that match the needed cards
+            firstTurnResults.append(len(np.intersect1d(neededCards, hand)))
+
+        else:
+            # Drawing the first 6 cards of the deck for second turn move
+            for index in range(0, 6):
+                hand.append(deck[index])
+            # Storing resulting draws that match the needed cards
+            secondTurnResults.append(len(np.intersect1d(neededCards, hand)))
+
         # Reset and adding to draw counter
         hand = []
         draws += 1
 
-zero = results.count(0)
-one = results.count(1)
-two = results.count(2)
-three = results.count(3)
-four = results.count(4)
-five = results.count(5)
+# Counting first turn results
+firstZero = firstTurnResults.count(0)
+firstOne = firstTurnResults.count(1)
+firstTwo = firstTurnResults.count(2)
+firstThree = firstTurnResults.count(3)
+firstFour = firstTurnResults.count(4)
+firstFive = firstTurnResults.count(5)
+
+# Counting second turn results
+secondZero = secondTurnResults.count(0)
+secondOne = secondTurnResults.count(1)
+secondTwo = secondTurnResults.count(2)
+secondThree = secondTurnResults.count(3)
+secondFour = secondTurnResults.count(4)
+secondFive = secondTurnResults.count(5)
+secondSix = secondTurnResults.count(6)
 
 print(
-    f"""You had {zero} hands with none of the needed cards
-    {one} with 1 or {(100 * one/draws):.2f}%
-    {two} with 2 or {(100 * two/draws):.2f}%
-    {three} with 3 or {(100 * three/draws):.2f}%
-    {four} with 4 or {(100 * four/draws):.2f}%
-    {five} with 5 or {(100 * five/draws):.2f}%
+    f"""    The following is for first turn draws
+    You had {firstZero} hands with none of the needed cards or {(100 * firstZero / draws):.2f}%
+    {firstOne} with 1 or {(100 * firstOne / draws):.2f}%
+    {firstTwo} with 2 or {(100 * firstTwo / draws):.2f}%
+    {firstThree} with 3 or {(100 * firstThree / draws):.2f}%
+    {firstFour} with 4 or {(100 * firstFour / draws):.2f}%
+    {firstFive} with 5 or {(100 * firstFive / draws):.2f}%
+    
+    The following is for second turn draws
+    You had {secondZero} hands with none of the needed cards or {(100 * secondZero / draws):.2f}%
+    {secondOne} with 1 or {(100 * secondOne / draws):.2f}%
+    {secondTwo} with 2 or {(100 * secondTwo / draws):.2f}%
+    {secondThree} with 3 or {(100 * secondThree / draws):.2f}%
+    {secondFour} with 4 or {(100 * secondFour / draws):.2f}%
+    {secondFive} with 5 or {(100 * secondFive / draws):.2f}%
+    {secondSix} with 6 or {(100 * secondSix / draws):.2f}%
     """
-    )
+)
