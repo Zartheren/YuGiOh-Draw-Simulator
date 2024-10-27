@@ -1,13 +1,12 @@
 # This programs purpose is to simulate first-hand draws of a deck to gauge the decks consistency
 
 import collections
-import string
-import numpy as np
-import re
-import random
-import pyinputplus
 import os
-
+import random
+import re
+import numpy as np
+import pyinputplus
+import PySimpleGUI as sg
 
 # Deck list that will hold the exported info from EDO Pro
 deckList = collections.deque([])
@@ -113,6 +112,7 @@ for runs in deck:
         # Reset and adding to total draw counter
         hand = []
         totalDraws += 1
+        sg.one_line_progress_meter("Drawing progress", totalDraws, requestedDraws)
 
 # Counting first turn results
 firstZero = firstTurnResults.count(0)
